@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Log.d("Http/SSL log", "Programmet har startat");
+        Log.d("Http/SSL log", "This is a test");
     }
 
 
