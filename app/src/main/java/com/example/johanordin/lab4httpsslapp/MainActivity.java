@@ -18,6 +18,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
 
 
 public class MainActivity extends Activity {
@@ -58,7 +59,6 @@ public class MainActivity extends Activity {
     }
 
 
-
     public void buttonAction(final String s_url) {
 
         loadingdialog = ProgressDialog.show(MainActivity.this, "", "Loading...", true);
@@ -68,10 +68,14 @@ public class MainActivity extends Activity {
             public void run() {
                 try {
                     //kod ska in här
+
                     String str = "";
                     URL url = new URL(s_url);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                    int statusCode = 0;
+                    statusCode = urlConnection.getResponseCode();
 
+                    /*
                     try {
                         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                         byte[] content = new byte[1024];
@@ -81,14 +85,13 @@ public class MainActivity extends Activity {
                             str = new String(content, 0 , bytesRead);
                         }
 
-
                     }finally {
                         urlConnection.disconnect();
                     }
+                    */
 
-                    showAlert(s_url, "HTTP Status: " + str);
+                    showAlert(s_url, "HTTP Status: " + statusCode);
                 } catch (Exception e) {
-                    //showAlert()
                     e.printStackTrace();
                     showAlert(s_url, "ERROR: " + e.getMessage());
                 }
