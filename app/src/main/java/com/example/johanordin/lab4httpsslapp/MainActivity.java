@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -16,6 +19,22 @@ public class MainActivity extends Activity {
 
         Log.d("Http/SSL log", "Programmet har startat");
         Log.d("Http/SSL log", "This is a test");
+
+        Button knapp1 = (Button)findViewById(R.id.knapp1);
+
+        knapp1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(getApplicationContext(),
+                        "Knapp1 är tryckt", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+
+
+
     }
 
 
