@@ -12,6 +12,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.apache.http.protocol.HTTP;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 public class MainActivity extends Activity {
 
@@ -61,10 +68,25 @@ public class MainActivity extends Activity {
             public void run() {
                 try {
                     //kod ska in här
+                    String str = "";
+                    URL url = new URL(s_url);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                    try {
+                        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                        byte[] content = new byte[1024];
+
+                        int bytesRead = 0;
+                        while ( (bytesRead = in.read(content)) != -1 ) {
+                            str = new String(content, 0 , bytesRead);
+                        }
 
 
+                    }finally {
+                        urlConnection.disconnect();
+                    }
 
-                    showAlert(s_url, "HTTP Status: ");
+                    showAlert(s_url, "HTTP Status: " + str);
                 } catch (Exception e) {
                     //showAlert()
                     e.printStackTrace();
