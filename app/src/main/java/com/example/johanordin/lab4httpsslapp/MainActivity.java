@@ -37,15 +37,10 @@ public class MainActivity extends Activity {
         knapp1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 buttonAction("https://www.liu.se/");
-                /*
-                Toast.makeText(getApplicationContext(),
-                        "Knapp1 är tryckt", Toast.LENGTH_LONG).show();
-                */
             }
         });
+
         Button knapp2 = (Button)findViewById(R.id.knapp2);
         knapp2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,11 +90,9 @@ public class MainActivity extends Activity {
                     e.printStackTrace();
                     showAlert(s_url, "ERROR: " + e.getMessage());
                 }
-
                 loadingdialog.dismiss();
             }
         });
-
         thread.start();
     }
 
@@ -112,7 +105,6 @@ public class MainActivity extends Activity {
             }
         });
     }
-
 
     public void showAlert(final String header, final String message) {
 
@@ -130,7 +122,6 @@ public class MainActivity extends Activity {
                         dialogInterface.cancel();
                     }
                 });
-
                 alertDialog.show();
             }
         });
