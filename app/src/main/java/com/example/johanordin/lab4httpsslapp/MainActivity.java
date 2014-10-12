@@ -33,6 +33,8 @@ public class MainActivity extends Activity {
         Log.d("Http/SSL log", "Programmet har startat");
         Log.d("Http/SSL log", "This is a test");
 
+
+
         Button knapp1 = (Button)findViewById(R.id.knapp1);
         knapp1.setOnClickListener(new View.OnClickListener() {
             @Override
