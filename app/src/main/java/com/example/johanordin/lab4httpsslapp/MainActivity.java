@@ -3,6 +3,7 @@ package com.example.johanordin.lab4httpsslapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedInputStream;
@@ -21,7 +32,9 @@ import java.net.URL;
 import java.security.KeyStore;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSocketFactory;
+//import javax.net.ssl.SSLSocketFactory;
+
+
 
 
 public class MainActivity extends Activity {
@@ -58,7 +71,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 buttonAction("https://tal-front.itn.liu.se:4002/");
-
             }
         });
         Button knapp4 = (Button)findViewById(R.id.knapp4);
@@ -66,29 +78,32 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 buttonAction("https://tal-front.itn.liu.se:4023/");
-
             }
         });
 
     }
 
-    //private SSLSocketFactory newSSLSocketFactory() {
+/*    private SSLSocketFactory newSSLSocketFactory() {
 
-        //try{
-            //KeyStore trustStore = KeyStore.getInstance("BKS");
-            //InputStream in = activtyContext.get
-        //}
+        try{
+            KeyStore trustStore = KeyStore.getInstance("BKS");
+            InputStream in = getResources().openRawResource(R.raw.keystore_lab4);
 
-
-    //}
-
-
-
-
+            try {
+                trustStore.load(in, "johan123".toCharArray());
+            }finally {
+                in.close();
+            }
 
 
+        return new SSLSocketFactory(trustStore);
 
+        }catch (Exception e) {
+            throw new AssertionError(e);
+        }
 
+    }
+    */
 
     public void buttonAction(final String s_url) {
 
@@ -100,13 +115,23 @@ public class MainActivity extends Activity {
                 try {
                     //kod ska in här
 
+
+                    // Instantiate the custom HttpClient
+                    DefaultHttpClient client = new MyHttpClient(getApplicationContext());
+                    HttpGet get = new HttpGet(s_url);
+                    // Execute the GET call and obtain the response
+                    HttpResponse getResponse = client.execute(get);
+                    HttpEntity responseEntity = getResponse.getEntity();
+                    showAlert(s_url, "HTTP Status: " + responseEntity.getContent());
+
                     String str = "";
                     int statusCode = 0;
-
+                    /*
                     URL url = new URL(s_url);
                     HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-                    //urlConnection.setSSLSocketFactory(sslFactory);
+                    //urlConnection.setSSLSocketFactory(newSSLSocketFactory());
                     statusCode = urlConnection.getResponseCode();
+                    */
 
                     /*
                     try {
@@ -123,7 +148,8 @@ public class MainActivity extends Activity {
                     }
                     */
 
-                    showAlert(s_url, "HTTP Status: " + statusCode);
+                    //showAlert(s_url, "HTTP Status: " + statusCode);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     showAlert(s_url, "ERROR: " + e.getMessage());
@@ -184,3 +210,4 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 }
+
