@@ -18,7 +18,10 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyStore;
+
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
 
 
 public class MainActivity extends Activity {
@@ -34,7 +37,7 @@ public class MainActivity extends Activity {
         Log.d("Http/SSL log", "This is a test");
 
 
-
+        //Knappar
         Button knapp1 = (Button)findViewById(R.id.knapp1);
         knapp1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,13 +50,44 @@ public class MainActivity extends Activity {
         knapp2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 buttonAction("https://tal-front.itn.liu.se/");
+            }
+        });
+        Button knapp3 = (Button)findViewById(R.id.knapp3);
+        knapp3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonAction("https://tal-front.itn.liu.se:4002/");
+
+            }
+        });
+        Button knapp4 = (Button)findViewById(R.id.knapp4);
+        knapp4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonAction("https://tal-front.itn.liu.se:4023/");
 
             }
         });
 
     }
+
+    //private SSLSocketFactory newSSLSocketFactory() {
+
+        //try{
+            //KeyStore trustStore = KeyStore.getInstance("BKS");
+            //InputStream in = activtyContext.get
+        //}
+
+
+    //}
+
+
+
+
+
+
+
 
 
     public void buttonAction(final String s_url) {
@@ -67,9 +101,11 @@ public class MainActivity extends Activity {
                     //kod ska in här
 
                     String str = "";
+                    int statusCode = 0;
+
                     URL url = new URL(s_url);
                     HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-                    int statusCode = 0;
+                    //urlConnection.setSSLSocketFactory(sslFactory);
                     statusCode = urlConnection.getResponseCode();
 
                     /*
@@ -113,7 +149,6 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 alertDialog.setTitle(header);
                 alertDialog.setMessage(message);
