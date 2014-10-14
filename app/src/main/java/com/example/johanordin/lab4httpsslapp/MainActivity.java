@@ -132,7 +132,10 @@ public class MainActivity extends Activity {
 
 
                     /*
-                    BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()));
+                    HttpEntity responseEntity = getResponse.getEntity();
+-                   //showAlert(s_url, "HTTP Status: " + responseEntity.getContent());
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(responseEntity.getContent()));
 
                     String line;
                     while ((line = in.readLine()) != null)
