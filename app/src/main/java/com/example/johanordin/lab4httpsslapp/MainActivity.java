@@ -3,7 +3,6 @@ package com.example.johanordin.lab4httpsslapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,39 +12,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.StrictHostnameVerifier;
 import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.protocol.HTTP;
 
-import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-//import javax.net.ssl.SSLSocketFactory;
 
 
 
