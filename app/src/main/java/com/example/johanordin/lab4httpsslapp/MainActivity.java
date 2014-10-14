@@ -21,15 +21,10 @@ import org.apache.http.message.BasicHttpResponse;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.KeyStore;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
-
-
 
 
 public class MainActivity extends Activity {
@@ -42,33 +37,30 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Log.d("Http/SSL log", "Programmet har startat");
-        Log.d("Http/SSL log", "This is a test");
-
 
         //Knappar
-        Button knapp1 = (Button)findViewById(R.id.knapp1);
+        Button knapp1 = (Button) findViewById(R.id.knapp1);
         knapp1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 buttonAction("https://www.liu.se/");
             }
         });
-
-        Button knapp2 = (Button)findViewById(R.id.knapp2);
+        Button knapp2 = (Button) findViewById(R.id.knapp2);
         knapp2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 buttonAction("https://tal-front.itn.liu.se/");
             }
         });
-        Button knapp3 = (Button)findViewById(R.id.knapp3);
+        Button knapp3 = (Button) findViewById(R.id.knapp3);
         knapp3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 buttonAction("https://tal-front.itn.liu.se:4002/");
             }
         });
-        Button knapp4 = (Button)findViewById(R.id.knapp4);
+        Button knapp4 = (Button) findViewById(R.id.knapp4);
         knapp4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,26 +102,25 @@ public class MainActivity extends Activity {
                 try {
                     //kod ska in här
 
+                    //-------------------------------------------------
+                    // Task 1
+                    ///*
+
+                    URL url = new URL(s_url);
+
+                    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                    urlConnection.setConnectTimeout(15000);
+                    //urlConnection.setSSLSocketFactory(newSSLSocketFactory());
+                    int statusCode;
+                    statusCode = urlConnection.getResponseCode();
+
+                    showAlert(s_url, "HTTP Status: " + statusCode);
+                    //*/
 
                     //--------------------------------------------------
+                    // Task 2
                     /*
-                    // Instantiate the custom HttpClient
-                    DefaultHttpClient client = new MyHttpClient(getApplicationContext());
-
-                    HttpGet get = new HttpGet(s_url);
-
-                    // Execute the GET call and obtain the response
-                    HttpResponse getResponse = client.execute(get);
-
-                    //HttpEntity responseEntity = getResponse.getEntity();
-                    StatusLine responseStatus = getResponse.getStatusLine();
-
-                    showAlert(s_url, "HTTP Status: " + responseStatus.toString());
-
-                    */
-                    //--------------------------------------------------
                     KeyStore trustStore = KeyStore.getInstance("BKS");
-                    //InputStream is = this.getAssets().open("discretio.bks");
                     InputStream is = getResources().openRawResource(R.raw.keystore_lab4);
 
                     trustStore.load(is, "johan123".toCharArray());
@@ -139,8 +130,13 @@ public class MainActivity extends Activity {
                     tmf.init(trustStore);
 
                     SSLContext context = SSLContext.getInstance("TLS");
-                    //original
-                    //context.init(null, tmf.getTrustManagers(), null);
+                    context.init(null, tmf.getTrustManagers(), null);       //original
+
+                    */
+                    //--------------------------------------------------
+
+                    // För att acceptera alla certificat
+                    /*
                     context.init(null, new TrustManager[] {
                             new X509TrustManager() {
                                 public void checkClientTrusted(X509Certificate[] chain, String authType) {}
@@ -148,29 +144,32 @@ public class MainActivity extends Activity {
                                 public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[]{}; }
                             }
                     }, null);
-                    HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+                    */
+
+                    //HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 
 
+                    //--------------------------------------------------
+                    /*
                     URL request = new URL(s_url);
                     HttpsURLConnection urlConnection = (HttpsURLConnection) request.openConnection();
 
-                    //ensure that we are using a StrictHostnameVerifier
                     //urlConnection.setHostnameVerifier(new StrictHostnameVerifier());
                     urlConnection.setHostnameVerifier(new AllowAllHostnameVerifier());
                     urlConnection.setSSLSocketFactory(context.getSocketFactory());
                     urlConnection.setConnectTimeout(15000);
 
-
-
                     InputStream in = urlConnection.getInputStream();
                     //I don't want to change my function's return type (laziness) so I'm building an HttpResponse
-                    BasicHttpEntity res = new BasicHttpEntity();
-                    res.setContent(in);
-                    HttpResponse resp = new BasicHttpResponse(HttpVersion.HTTP_1_1, urlConnection.getResponseCode(), "");
-                    resp.setEntity(res);
+                    BasicHttpEntity entity = new BasicHttpEntity();
 
-                    showAlert(s_url, "HTTP Status: " + resp.getStatusLine());
+                    entity.setContent(in);
+                    HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, urlConnection.getResponseCode(), "");
+                    response.setEntity(entity);
 
+                    showAlert(s_url, "HTTP Status: " + response.getStatusLine());
+
+                    */
                     //--------------------------------------------------
                     /*
                     HttpEntity responseEntity = getResponse.getEntity();
@@ -186,31 +185,21 @@ public class MainActivity extends Activity {
                     */
 
                     /*
-                    String str = "";
-                    int statusCode = 0;
+                    // Instantiate the custom HttpClient
+                    DefaultHttpClient client = new MyHttpClient(getApplicationContext());
 
-                    URL url = new URL(s_url);
-                    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-                    //urlConnection.setSSLSocketFactory(newSSLSocketFactory());
-                    statusCode = urlConnection.getResponseCode();
+                    HttpGet get = new HttpGet(s_url);
+
+                    // Execute the GET call and obtain the response
+                    HttpResponse getResponse = client.execute(get);
+
+                    //HttpEntity responseEntity = getResponse.getEntity();
+                    StatusLine responseStatus = getResponse.getStatusLine();
+
+                    showAlert(s_url, "HTTP Status: " + responseStatus.toString());
                     */
+                    //--------------------------------------------------
 
-                    /*
-                    try {
-                        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                        byte[] content = new byte[1024];
-
-                        int bytesRead = 0;
-                        while ( (bytesRead = in.read(content)) != -1 ) {
-                            str = new String(content, 0 , bytesRead);
-                        }
-
-                    }finally {
-                        urlConnection.disconnect();
-                    }
-                    */
-
-                    //showAlert(s_url, "HTTP Status: " + statusCode);
 
                 } catch (Exception e) {
                     e.printStackTrace();
