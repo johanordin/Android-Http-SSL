@@ -16,15 +16,20 @@ import android.widget.Toast;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.HttpVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.StrictHostnameVerifier;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
+import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedInputStream;
@@ -34,6 +39,9 @@ import java.net.URL;
 import java.security.KeyStore;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 //import javax.net.ssl.SSLSocketFactory;
 
 
@@ -117,6 +125,9 @@ public class MainActivity extends Activity {
                 try {
                     //kod ska in här
 
+
+                    //--------------------------------------------------
+                    /*
                     // Instantiate the custom HttpClient
                     DefaultHttpClient client = new MyHttpClient(getApplicationContext());
 
@@ -130,7 +141,42 @@ public class MainActivity extends Activity {
 
                     showAlert(s_url, "HTTP Status: " + responseStatus.toString());
 
+                    */
+                    //--------------------------------------------------
+                    KeyStore trustStore = KeyStore.getInstance("BKS");
+                    //InputStream is = this.getAssets().open("discretio.bks");
+                    InputStream is = getResources().openRawResource(R.raw.keystore_lab4);
 
+                    trustStore.load(is, "johan123".toCharArray());
+                    is.close();
+
+                    TrustManagerFactory tmf = TrustManagerFactory.getInstance("X509");
+                    tmf.init(trustStore);
+
+                    SSLContext context = SSLContext.getInstance("TLS");
+                    context.init(null, tmf.getTrustManagers(), null);
+
+                    URL request = new URL(s_url);
+                    HttpsURLConnection urlConnection = (HttpsURLConnection) request.openConnection();
+
+                    //ensure that we are using a StrictHostnameVerifier
+                    //urlConnection.setHostnameVerifier(new StrictHostnameVerifier());
+                    urlConnection.setHostnameVerifier(new AllowAllHostnameVerifier());
+                    urlConnection.setSSLSocketFactory(context.getSocketFactory());
+                    urlConnection.setConnectTimeout(15000);
+
+
+
+                    InputStream in = urlConnection.getInputStream();
+                    //I don't want to change my function's return type (laziness) so I'm building an HttpResponse
+                    BasicHttpEntity res = new BasicHttpEntity();
+                    res.setContent(in);
+                    HttpResponse resp = new BasicHttpResponse(HttpVersion.HTTP_1_1, urlConnection.getResponseCode(), "");
+                    resp.setEntity(res);
+
+                    showAlert(s_url, "HTTP Status: " + resp.getStatusLine());
+
+                    //--------------------------------------------------
                     /*
                     HttpEntity responseEntity = getResponse.getEntity();
 -                   //showAlert(s_url, "HTTP Status: " + responseEntity.getContent());
