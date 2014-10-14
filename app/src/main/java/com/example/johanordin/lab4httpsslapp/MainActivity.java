@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
         knapp1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonAction("http://www.liu.se/");
+                buttonAction("https://www.liu.se/");
             }
         });
 
@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
         knapp4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonAction("http://tal-front.itn.liu.se:4023/");
+                buttonAction("https://tal-front.itn.liu.se:4023/");
             }
         });
 
