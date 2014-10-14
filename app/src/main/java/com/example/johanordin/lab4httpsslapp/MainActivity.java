@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -55,7 +57,7 @@ public class MainActivity extends Activity {
         knapp1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonAction("https://www.liu.se/");
+                buttonAction("http://www.liu.se/");
             }
         });
 
@@ -77,7 +79,7 @@ public class MainActivity extends Activity {
         knapp4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonAction("https://tal-front.itn.liu.se:4023/");
+                buttonAction("http://tal-front.itn.liu.se:4023/");
             }
         });
 
@@ -115,18 +117,34 @@ public class MainActivity extends Activity {
                 try {
                     //kod ska in här
 
-
                     // Instantiate the custom HttpClient
                     DefaultHttpClient client = new MyHttpClient(getApplicationContext());
+
                     HttpGet get = new HttpGet(s_url);
+
                     // Execute the GET call and obtain the response
                     HttpResponse getResponse = client.execute(get);
-                    HttpEntity responseEntity = getResponse.getEntity();
-                    showAlert(s_url, "HTTP Status: " + responseEntity.getContent());
 
+                    //HttpEntity responseEntity = getResponse.getEntity();
+                    StatusLine responseStatus = getResponse.getStatusLine();
+
+                    showAlert(s_url, "HTTP Status: " + responseStatus.toString());
+
+
+                    /*
+                    BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()));
+
+                    String line;
+                    while ((line = in.readLine()) != null)
+                        System.out.println(line);
+                    in.close();
+
+                    */
+
+                    /*
                     String str = "";
                     int statusCode = 0;
-                    /*
+
                     URL url = new URL(s_url);
                     HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
                     //urlConnection.setSSLSocketFactory(newSSLSocketFactory());
