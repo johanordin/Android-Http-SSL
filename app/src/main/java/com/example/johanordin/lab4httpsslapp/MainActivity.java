@@ -37,11 +37,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyStore;
+import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 //import javax.net.ssl.SSLSocketFactory;
 
 
@@ -154,7 +157,17 @@ public class MainActivity extends Activity {
                     tmf.init(trustStore);
 
                     SSLContext context = SSLContext.getInstance("TLS");
-                    context.init(null, tmf.getTrustManagers(), null);
+                    //original
+                    //context.init(null, tmf.getTrustManagers(), null);
+                    context.init(null, new TrustManager[] {
+                            new X509TrustManager() {
+                                public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+                                public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+                                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[]{}; }
+                            }
+                    }, null);
+                    HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+
 
                     URL request = new URL(s_url);
                     HttpsURLConnection urlConnection = (HttpsURLConnection) request.openConnection();
